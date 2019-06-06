@@ -1,16 +1,14 @@
 package com.mycv.android
 
 import android.arch.lifecycle.Observer
-import android.arch.lifecycle.ViewModel
 import android.arch.lifecycle.ViewModelProviders
 import android.os.Bundle
 import android.support.design.widget.Snackbar
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu
 import android.view.MenuItem
-import com.mycv.android.core.DependencyLocator
 import com.mycv.android.data.model.Resume
-import com.mycv.android.data.vm.ResumeViewModel
+import com.mycv.android.vm.ResumeViewModel
 
 import kotlinx.android.synthetic.main.activity_main.*
 

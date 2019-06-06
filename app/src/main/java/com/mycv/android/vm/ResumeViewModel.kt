@@ -1,4 +1,4 @@
-package com.mycv.android.data.vm
+package com.mycv.android.vm
 
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
