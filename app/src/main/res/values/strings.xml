@@ -6,6 +6,7 @@
     <string name="skills">Skills</string>
     <string name="experience">Experience</string>
     <string name="education">Education</string>
+    <string name="tech_env">Technical Environment:</string>
 
     <string name="action_settings">Settings</string>
 </resources>

@@ -32,7 +32,7 @@
                 app:layout_constraintTop_toBottomOf="@id/fullName"
                 app:layout_constraintStart_toStartOf="@id/fullName"
                 style="@style/TextAppearance.AppCompat.Title"
-                android:layout_marginTop="@dimen/margin_gap_small"
+                android:layout_marginTop="@dimen/margin_small"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"/>
 

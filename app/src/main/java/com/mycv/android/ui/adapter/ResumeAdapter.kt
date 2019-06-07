@@ -2,20 +2,19 @@ package com.mycv.android.ui.adapter
 
 import android.animation.LayoutTransition
 import android.animation.ObjectAnimator
-import android.os.Build
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.LinearLayout
-import android.widget.TextView
 import com.mycv.android.R
+import com.mycv.android.data.model.WorkExperience
 import com.mycv.android.ui.adapter.entry.*
-import kotlinx.android.synthetic.main.label_value_line.view.*
-import kotlinx.android.synthetic.main.profile_resume_row.view.*
-import kotlinx.android.synthetic.main.simple_line.view.*
+import com.mycv.android.ui.adapter.vh.*
 
-class ResumeAdapter(private var data: List<TitledEntry>? = null) : RecyclerView.Adapter<TitledViewVH>() {
+class ResumeAdapter(
+    private var data: List<TitledEntry>? = null,
+    private val listener: ExperienceExpandListener? = null
+) : RecyclerView.Adapter<TitledViewViewHolder>() {
 
     fun setData(entries: List<TitledEntry>) {
         this.data = entries
@@ -28,21 +27,23 @@ class ResumeAdapter(private var data: List<TitledEntry>? = null) : RecyclerView.
             is ContactsEntry -> TYPE_CONTACTS
             is SkillsEntry -> TYPE_SKILLS
             is ResumeObjectiveEntry -> TYPE_RESUME_OBJECTIVE
+            is ExperienceEntry -> TYPE_EXPERIENCE
             else -> TYPE_DEFAULT
         }
 
-    override fun onCreateViewHolder(parent: ViewGroup, type: Int): TitledViewVH {
+    override fun onCreateViewHolder(parent: ViewGroup, type: Int): TitledViewViewHolder {
 
         return when (type) {
             TYPE_PROFILE -> ProfileViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.profile_resume_row, parent, false))
             TYPE_CONTACTS -> ContactsViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.simple_resume_row, parent, false))
             TYPE_SKILLS -> SkillsViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.simple_resume_row, parent, false))
             TYPE_RESUME_OBJECTIVE -> ResumeObjectiveViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.simple_resume_row, parent, false))
-            else -> TitledViewVH(LayoutInflater.from(parent.context).inflate(R.layout.simple_resume_row, parent, false))
+            TYPE_EXPERIENCE -> ExperienceViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.simple_resume_row, parent, false), listener)
+            else -> TitledViewViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.simple_resume_row, parent, false))
         }
     }
 
-    override fun onBindViewHolder(holder: TitledViewVH, position: Int) {
+    override fun onBindViewHolder(holder: TitledViewViewHolder, position: Int) {
         val entry = data?.get(position)
 
         entry?.let {
@@ -59,7 +60,7 @@ class ResumeAdapter(private var data: List<TitledEntry>? = null) : RecyclerView.
         }
     }
 
-    private fun click(holder: TitledViewVH, entry: TitledEntry) {
+    private fun click(holder: TitledViewViewHolder, entry: TitledEntry) {
         val visibility = if (entry.isExpanded == View.VISIBLE) View.GONE else View.VISIBLE
 
         // animate layout change only when showing
@@ -88,86 +89,15 @@ class ResumeAdapter(private var data: List<TitledEntry>? = null) : RecyclerView.
         private const val TYPE_CONTACTS = 2
         private const val TYPE_SKILLS = 3
         private const val TYPE_RESUME_OBJECTIVE = 4
+        private const val TYPE_EXPERIENCE = 5
+
     }
 }
 
-open class TitledViewVH(view: View): RecyclerView.ViewHolder(view) {
-
-    val title: TextView? = view.findViewById(R.id.title)
-    val details: LinearLayout? = view.findViewById(R.id.details)
-    val detailsCard: ViewGroup? = view.findViewById(R.id.detailsCard)
-    val expand: View? = view.findViewById(R.id.expand)
-
-    open fun bind(entry: TitledEntry) {
-
-    }
-
-    protected fun addKeyValueLine(details: LinearLayout, key: String, value: String) {
-        val line = LayoutInflater.from(details.context).inflate(R.layout.label_value_line, details, false)
-
-        line.label.text = key
-        line.value.text = value
-
-        details.addView(line)
-    }
-}
-
-class ProfileViewHolder(view: View): TitledViewVH(view) {
-
-    private val fullName: TextView? = view.fullName
-    private val profession: TextView? = view.profession
-
-    override fun bind(entry: TitledEntry) {
-        (entry as? ProfileEntry)?.let {
-            fullName?.text = entry.fullName
-            profession?.text = entry.profession
-        }
-    }
-}
-
-class ContactsViewHolder(view: View): TitledViewVH(view) {
-
-    override fun bind(entry: TitledEntry) {
-
-        details?.let { details ->
-            (entry as? ContactsEntry)?.let {
-                it.contacts.entries.forEach { item ->
-                    addKeyValueLine(details, item.key, item.value)
-                }
-            }
-        }
-    }
-}
-
-class SkillsViewHolder(view: View): TitledViewVH(view) {
-
-    override fun bind(entry: TitledEntry) {
-
-        details?.let { details ->
-            (entry as? SkillsEntry)?.let {
-                it.skills.entries.forEach { item ->
-                    addKeyValueLine(details, item.key, item.value.joinToString())
-                }
-            }
-        }
-    }
-}
-
-class ResumeObjectiveViewHolder(view: View): TitledViewVH(view) {
-
-    override fun bind(entry: TitledEntry) {
-
-        details?.let { details ->
-            (entry as? ResumeObjectiveEntry)?.let {
-                it.resumeObjective.map { item -> "\u2022 $item" }.forEach { item ->
-                    val line = LayoutInflater.from(details.context).inflate(R.layout.simple_line, details, false)
-
-                    line.line.text = item
-
-                    details.addView(line)
-                }
-            }
-        }
-    }
+/**
+ * DUMMY APPROACH BUT I DON'T WANT TO ADD EVENT BUS OR RX
+ */
+interface ExperienceExpandListener {
+    fun onSelected(workExperienceEntry: WorkExperience)
 }
 

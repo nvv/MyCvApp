@@ -1,7 +1,9 @@
 package com.mycv.android
 
+import android.app.ActivityOptions
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
+import android.content.Intent
 import android.os.Bundle
 import android.os.DropBoxManager
 import android.support.design.widget.Snackbar
@@ -11,6 +13,8 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import com.mycv.android.data.model.Resume
+import com.mycv.android.data.model.WorkExperience
+import com.mycv.android.ui.adapter.ExperienceExpandListener
 import com.mycv.android.ui.adapter.ResumeAdapter
 import com.mycv.android.ui.adapter.ResumeEntryBuilder
 import com.mycv.android.ui.adapter.entry.*
@@ -40,19 +44,19 @@ class ResumeActivity : AppCompatActivity() {
 
 
         val viewManager = LinearLayoutManager(this)
-        val viewAdapter = ResumeAdapter()
+        val viewAdapter = ResumeAdapter(listener = object : ExperienceExpandListener {
+            override fun onSelected(workExperienceEntry: WorkExperience) {
+                startActivity(
+                    WorkItemActivity.createIntent(this@ResumeActivity, workExperienceEntry),
+                    ActivityOptions.makeSceneTransitionAnimation(this@ResumeActivity).toBundle())
+            }
+
+        })
 
         resumeData.apply {
-            // use this setting to improve performance if you know that changes
-            // in content do not change the layout size of the RecyclerView
             setHasFixedSize(true)
-
-            // use a linear layout manager
             layoutManager = viewManager
-
-            // specify an viewAdapter (see also next example)
             adapter = viewAdapter
-
         }
 
         viewModel.resume.observe(this, Observer<Resume> {resume ->
