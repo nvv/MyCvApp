@@ -1,4 +1,11 @@
 <resources>
     <string name="app_name">MyCV</string>
+
+    <string name="contacts">Contacts</string>
+    <string name="resume_objective">Resume Objective</string>
+    <string name="skills">Skills</string>
+    <string name="experience">Experience</string>
+    <string name="education">Education</string>
+
     <string name="action_settings">Settings</string>
 </resources>

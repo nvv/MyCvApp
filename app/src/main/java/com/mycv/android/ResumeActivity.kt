@@ -12,9 +12,8 @@ import android.view.MenuItem
 import android.view.View
 import com.mycv.android.data.model.Resume
 import com.mycv.android.ui.adapter.ResumeAdapter
-import com.mycv.android.ui.adapter.entry.ContactsEntry
-import com.mycv.android.ui.adapter.entry.ProfileEntry
-import com.mycv.android.ui.adapter.entry.TitledEntry
+import com.mycv.android.ui.adapter.ResumeEntryBuilder
+import com.mycv.android.ui.adapter.entry.*
 import com.mycv.android.vm.ResumeViewModel
 
 import kotlinx.android.synthetic.main.activity_main.*
@@ -57,33 +56,9 @@ class ResumeActivity : AppCompatActivity() {
         }
 
         viewModel.resume.observe(this, Observer<Resume> {resume ->
-
-            val array = mutableListOf<TitledEntry>()
-
             resume?.let {
-                resume.profile?.let {
-                    array.add(ProfileEntry(it))
-                }
-                resume.contacts?.let {
-                    array.add(ContactsEntry(it))
-                }
-                resume.objectiveNotes?.let {
-                    array.add(TitledEntry("Ojective Notes"))
-                }
-                resume.skillMap?.let {
-                    array.add(TitledEntry("Skills"))
-                }
-                resume.experience?.let {
-                    array.add(TitledEntry("Experience"))
-                }
-                resume.education?.let {
-                    array.add(TitledEntry("Education"))
-                }
-
+                viewAdapter.setData(ResumeEntryBuilder.build(applicationContext, resume))
             }
-
-
-            viewAdapter.setDataSet(array)
         })
 
         viewModel.loadResume()

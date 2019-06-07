@@ -1,27 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
                                              xmlns:app="http://schemas.android.com/apk/res-auto"
-                                             android:animateLayoutChanges="true"
+                                             android:paddingTop="@dimen/padding_x_small"
                                              android:layout_width="match_parent"
                                              android:layout_height="wrap_content">
 
     <TextView
             android:id="@+id/label"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/value"
             app:layout_constraintStart_toStartOf="parent"
             style="@style/LabelText"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
 
-
     <TextView
             android:id="@+id/value"
-            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/label"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toEndOf="@id/label"
+            app:layout_constraintStart_toStartOf="parent"
             style="@style/ValueText"
-            android:layout_marginStart="@dimen/margin_gap_small"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
 
