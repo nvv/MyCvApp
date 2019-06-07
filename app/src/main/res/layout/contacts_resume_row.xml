@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                                             xmlns:app="http://schemas.android.com/apk/res-auto"
+                                             android:animateLayoutChanges="true"
+                                             android:layout_width="match_parent"
+                                             android:layout_height="wrap_content">
+
+    <TextView
+            android:id="@+id/title"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintBottom_toTopOf="@id/detailsCard"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            style="@style/SectionHeader"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+    <android.support.v7.widget.CardView
+            android:id="@+id/detailsCard"
+            app:cardCornerRadius="4dp"
+            app:cardMaxElevation="4dp"
+            app:cardElevation="2dp"
+            android:background="@drawable/dummy_bg"
+            app:layout_constraintTop_toBottomOf="@+id/title"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            android:animateLayoutChanges="true"
+            android:layout_margin="4dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+        <LinearLayout
+                android:id="@+id/details"
+                android:padding="@dimen/internal_padding"
+                android:orientation="vertical"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+    </android.support.v7.widget.CardView>
+
+</android.support.constraint.ConstraintLayout>

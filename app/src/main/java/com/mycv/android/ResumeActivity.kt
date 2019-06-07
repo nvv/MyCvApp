@@ -12,6 +12,7 @@ import android.view.MenuItem
 import android.view.View
 import com.mycv.android.data.model.Resume
 import com.mycv.android.ui.adapter.ResumeAdapter
+import com.mycv.android.ui.adapter.entry.ContactsEntry
 import com.mycv.android.ui.adapter.entry.ProfileEntry
 import com.mycv.android.ui.adapter.entry.TitledEntry
 import com.mycv.android.vm.ResumeViewModel
@@ -64,7 +65,7 @@ class ResumeActivity : AppCompatActivity() {
                     array.add(ProfileEntry(it))
                 }
                 resume.contacts?.let {
-                    array.add(TitledEntry("Contacts"))
+                    array.add(ContactsEntry(it))
                 }
                 resume.objectiveNotes?.let {
                     array.add(TitledEntry("Ojective Notes"))
