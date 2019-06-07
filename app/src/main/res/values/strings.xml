@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">MyCV</string>
+    <string name="app_name">My CV</string>
 
     <string name="contacts">Contacts</string>
     <string name="resume_objective">Resume Objective</string>
@@ -7,6 +7,10 @@
     <string name="experience">Experience</string>
     <string name="education">Education</string>
     <string name="tech_env">Technical Environment:</string>
+
+    <string name="email_invite">Invite to the Interview</string>
+    <string name="send_using">"Send email using…</string>
+    <string name="no_client_installed">No email clients installed</string>
 
     <string name="action_settings">Settings</string>
 </resources>

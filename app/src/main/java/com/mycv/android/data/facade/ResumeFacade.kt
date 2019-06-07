@@ -10,9 +10,9 @@ class ResumeFacade constructor(private val service: ResumeService,
                                private val manager: NetworkManager,
                                private val storage: Storage) {
 
-    fun getResume() : Resume? {
+    fun getResume(force: Boolean = false) : Resume? {
         val json: String?
-        if (manager.isNetworkAvailable() && isTimeToUpdate()) {
+        if (manager.isNetworkAvailable() && (isTimeToUpdate() || force)) {
             json = service.getResumeRaw()
             json?.let {
                 storage.putResumeJsonToCache(it)

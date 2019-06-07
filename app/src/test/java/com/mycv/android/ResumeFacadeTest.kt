@@ -112,6 +112,25 @@ class ResumeFacadeTest {
         }
     }
 
+    @Test
+    fun `test check force reload`() {
+
+        every { networkManager.isNetworkAvailable() } returns true
+        every { storage.resumeUpdateTimestap } returns System.currentTimeMillis()
+        every { resumeService.getResumeRaw() } returns RESPONSE_PROFILE_ONLY
+        every { storage.putResumeJsonToCache(RESPONSE_PROFILE_ONLY) } returns Unit
+
+        val resume = resumeFacade.getResume(force = true)
+        Assert.assertNotNull(resume)
+
+        verifyOrder {
+            networkManager.isNetworkAvailable()
+            storage.resumeUpdateTimestap
+            resumeService.getResumeRaw()
+            storage.putResumeJsonToCache(RESPONSE_PROFILE_ONLY)
+        }
+    }
+
     companion object {
         const val EMPTY_RESPONSE = ""
 

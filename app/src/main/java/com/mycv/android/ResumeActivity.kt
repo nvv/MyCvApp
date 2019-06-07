@@ -1,8 +1,11 @@
 package com.mycv.android
 
+import android.annotation.SuppressLint
 import android.app.ActivityOptions
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
+import android.content.ActivityNotFoundException
+import android.content.Intent
 import android.os.Bundle
 import android.support.design.widget.Snackbar
 import android.support.v7.app.AppCompatActivity;
@@ -10,6 +13,7 @@ import android.support.v7.widget.LinearLayoutManager
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.widget.Toast
 import com.mycv.android.data.model.Resume
 import com.mycv.android.data.model.WorkExperience
 import com.mycv.android.ui.adapter.ExperienceExpandListener
@@ -32,21 +36,14 @@ class ResumeActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         setSupportActionBar(toolbar)
 
-        fab.setOnClickListener { view ->
-            Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                .setAction("Action", null).show()
-
-            viewModel.loadResume()
-        }
-
         val viewManager = LinearLayoutManager(this)
         val viewAdapter = ResumeAdapter(listener = object : ExperienceExpandListener {
             override fun onSelected(workExperienceEntry: WorkExperience) {
                 startActivity(
                     WorkItemActivity.createIntent(this@ResumeActivity, workExperienceEntry),
-                    ActivityOptions.makeSceneTransitionAnimation(this@ResumeActivity).toBundle())
+                    ActivityOptions.makeSceneTransitionAnimation(this@ResumeActivity).toBundle()
+                )
             }
-
         })
 
         resumeData.apply {
@@ -62,7 +59,8 @@ class ResumeActivity : AppCompatActivity() {
             resumeData.visibility = if (isLoading) View.GONE else View.VISIBLE
         })
 
-        viewModel.resume.observe(this, Observer<Resume> {resume ->
+        viewModel.resume.observe(this, Observer<Resume> { resume ->
+            setupContactButton(resume)
             resume?.let {
                 viewAdapter.setData(ResumeEntryBuilder.build(applicationContext, resume))
 
@@ -73,6 +71,27 @@ class ResumeActivity : AppCompatActivity() {
         viewModel.loadResume()
     }
 
+    @SuppressLint("RestrictedApi")
+    private fun setupContactButton(resume: Resume?) {
+        val to = resume?.contacts?.get("Email")
+
+        inviteViaEmail.visibility = if (!to.isNullOrEmpty()) View.VISIBLE else View.GONE
+        to?.let {
+            inviteViaEmail.setOnClickListener { view ->
+                try {
+                    startActivity(
+                        Intent.createChooser(
+                            viewModel.contactViaEmail(to, getString(R.string.email_invite)),
+                            getString(R.string.send_using)
+                        )
+                    );
+                } catch (ex: ActivityNotFoundException) {
+                    Toast.makeText(this@ResumeActivity, getString(R.string.no_client_installed), Toast.LENGTH_SHORT).show();
+                }
+            }
+        }
+    }
+
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.menu_main, menu)
         return true
@@ -80,7 +99,10 @@ class ResumeActivity : AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
-            R.id.action_settings -> true
+            R.id.action_reload_resume -> {
+                viewModel.loadResume(force = true)
+                true
+            }
             else -> super.onOptionsItemSelected(item)
         }
     }
