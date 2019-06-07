@@ -12,6 +12,7 @@ class ResumeObjectiveViewHolder(view: View): TitledViewViewHolder(view) {
     override fun bind(entry: TitledEntry) {
 
         details?.let { details ->
+            details.removeAllViews()
             (entry as? ResumeObjectiveEntry)?.let {
                 it.resumeObjective.map { item -> "\u2022 $item" }.forEach { item ->
                     val line = LayoutInflater.from(details.context).inflate(R.layout.simple_line, details, false)

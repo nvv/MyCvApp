@@ -27,7 +27,7 @@ object ResumeEntryBuilder {
                 array.add(ExperienceEntry(context.getString(R.string.experience), it))
             }
             resume.education?.let {
-                array.add(TitledEntry("Education"))
+                array.add(EducationEntry(context.getString(R.string.education), it))
             }
 
         }

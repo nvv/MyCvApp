@@ -9,6 +9,7 @@ class SkillsViewHolder(view: View): TitledViewViewHolder(view) {
     override fun bind(entry: TitledEntry) {
 
         details?.let { details ->
+            details.removeAllViews()
             (entry as? SkillsEntry)?.let {
                 it.skills.entries.forEach { item ->
                     addKeyValueLine(details, item.key, item.value.joinToString())

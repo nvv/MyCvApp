@@ -14,6 +14,7 @@ class ExperienceViewHolder(view: View, private val listener: ExperienceExpandLis
     override fun bind(entry: TitledEntry) {
 
         details?.let { details ->
+            details.removeAllViews()
             (entry as? ExperienceEntry)?.let {
                 it.experienceEntries.forEach { item ->
                     val row = LayoutInflater.from(details.context).inflate(R.layout.experience_row_compact, details, false)

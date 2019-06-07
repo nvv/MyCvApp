@@ -28,6 +28,7 @@ class ResumeAdapter(
             is SkillsEntry -> TYPE_SKILLS
             is ResumeObjectiveEntry -> TYPE_RESUME_OBJECTIVE
             is ExperienceEntry -> TYPE_EXPERIENCE
+            is EducationEntry -> TYPE_EDUCATION
             else -> TYPE_DEFAULT
         }
 
@@ -39,6 +40,7 @@ class ResumeAdapter(
             TYPE_SKILLS -> SkillsViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.simple_resume_row, parent, false))
             TYPE_RESUME_OBJECTIVE -> ResumeObjectiveViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.simple_resume_row, parent, false))
             TYPE_EXPERIENCE -> ExperienceViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.simple_resume_row, parent, false), listener)
+            TYPE_EDUCATION -> EducationViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.simple_resume_row, parent, false))
             else -> TitledViewViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.simple_resume_row, parent, false))
         }
     }
@@ -90,6 +92,7 @@ class ResumeAdapter(
         private const val TYPE_SKILLS = 3
         private const val TYPE_RESUME_OBJECTIVE = 4
         private const val TYPE_EXPERIENCE = 5
+        private const val TYPE_EDUCATION = 6
 
     }
 }
