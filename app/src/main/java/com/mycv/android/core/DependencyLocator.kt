@@ -13,7 +13,7 @@ class DependencyLocator private constructor() {
 
     fun initLocator(context: Context) {
         resumeFacade = ResumeFacade(ResumeService.create(context),
-            context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager,
+            NetworkManager(context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager),
             Storage(context))
     }
 
