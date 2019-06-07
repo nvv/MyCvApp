@@ -62,9 +62,12 @@ class ResumeActivity : AppCompatActivity() {
         viewModel.resume.observe(this, Observer<Resume> { resume ->
             setupContactButton(resume)
             resume?.let {
+                no_data.visibility = View.GONE
                 viewAdapter.setData(ResumeEntryBuilder.build(applicationContext, resume))
 
                 title = resume.profile?.fullName
+            } ?: run {
+                no_data.visibility = View.VISIBLE
             }
         })
 
@@ -77,14 +80,14 @@ class ResumeActivity : AppCompatActivity() {
 
         inviteViaEmail.visibility = if (!to.isNullOrEmpty()) View.VISIBLE else View.GONE
         to?.let {
-            inviteViaEmail.setOnClickListener { view ->
+            inviteViaEmail.setOnClickListener {
                 try {
                     startActivity(
                         Intent.createChooser(
                             viewModel.contactViaEmail(to, getString(R.string.email_invite)),
                             getString(R.string.send_using)
                         )
-                    );
+                    )
                 } catch (ex: ActivityNotFoundException) {
                     Toast.makeText(this@ResumeActivity, getString(R.string.no_client_installed), Toast.LENGTH_SHORT).show();
                 }

@@ -23,7 +23,7 @@ class Storage (context: Context) {
 
     private fun cacheFile() = File(cacheDir, RESUME_CACHE_FILE)
 
-    fun getResumeJson() = cacheFile().readText()
+    fun getResumeJson() = if (cacheFile().exists()) cacheFile().readText() else null
 
     companion object {
         private const val PREFERENCE = "PREFERENCE"
