@@ -5,7 +5,9 @@ import com.mycv.android.core.NetworkManager
 import com.mycv.android.core.Storage
 import com.mycv.android.data.model.Resume
 import com.mycv.android.data.service.ResumeService
+import javax.inject.Singleton
 
+@Singleton
 class ResumeFacade constructor(private val service: ResumeService,
                                private val manager: NetworkManager,
                                private val storage: Storage) {
