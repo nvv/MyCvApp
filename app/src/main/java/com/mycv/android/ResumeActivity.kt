@@ -3,6 +3,7 @@ package com.mycv.android
 import android.annotation.SuppressLint
 import android.app.ActivityOptions
 import android.arch.lifecycle.Observer
+import android.arch.lifecycle.ViewModelProvider
 import android.arch.lifecycle.ViewModelProviders
 import android.content.ActivityNotFoundException
 import android.content.Intent
@@ -20,21 +21,26 @@ import com.mycv.android.ui.adapter.ExperienceExpandListener
 import com.mycv.android.ui.adapter.ResumeAdapter
 import com.mycv.android.ui.adapter.ResumeEntryBuilder
 import com.mycv.android.vm.ResumeViewModel
+import dagger.android.AndroidInjection
 
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.content_main.*
+import javax.inject.Inject
 
 class ResumeActivity : AppCompatActivity() {
 
-    private val viewModel: ResumeViewModel
-        get() = ViewModelProviders
-            .of(this@ResumeActivity)
-            .get(ResumeViewModel::class.java)
+    @Inject
+    lateinit var viewModelFactory: ViewModelProvider.Factory
+
+    lateinit var viewModel: ResumeViewModel
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         setSupportActionBar(toolbar)
+
+        AndroidInjection.inject(this)
+        viewModel = ViewModelProviders.of(this, viewModelFactory).get(ResumeViewModel::class.java)
 
         val viewManager = LinearLayoutManager(this)
         val viewAdapter = ResumeAdapter(listener = object : ExperienceExpandListener {
