@@ -1,7 +1,7 @@
 package com.mycv.android.di
 
-import android.arch.lifecycle.ViewModel
-import android.arch.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
 import com.mycv.android.vm.ResumeViewModel
 import dagger.Binds
 import dagger.Module

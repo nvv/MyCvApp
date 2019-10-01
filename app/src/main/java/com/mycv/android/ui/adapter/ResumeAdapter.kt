@@ -2,10 +2,10 @@ package com.mycv.android.ui.adapter
 
 import android.animation.LayoutTransition
 import android.animation.ObjectAnimator
-import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.RecyclerView
 import com.mycv.android.R
 import com.mycv.android.data.model.WorkExperience
 import com.mycv.android.ui.adapter.entry.*
