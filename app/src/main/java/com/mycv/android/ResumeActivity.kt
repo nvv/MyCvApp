@@ -16,67 +16,51 @@ import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.mycv.android.data.model.Resume
 import com.mycv.android.data.model.WorkExperience
+import com.mycv.android.fragments.DashboardFragment
 import com.mycv.android.ui.adapter.ExperienceExpandListener
 import com.mycv.android.ui.adapter.ResumeAdapter
 import com.mycv.android.ui.adapter.ResumeEntryBuilder
 import com.mycv.android.vm.ResumeViewModel
 import dagger.android.AndroidInjection
+import dagger.android.support.AndroidSupportInjection
+import dagger.android.support.DaggerAppCompatActivity
 
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.content_main.*
 import javax.inject.Inject
 
-class ResumeActivity : AppCompatActivity() {
+class ResumeActivity : DaggerAppCompatActivity() {
 
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
 
     lateinit var viewModel: ResumeViewModel
 
+    @SuppressLint("RestrictedApi")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        setSupportActionBar(toolbar)
 
         AndroidInjection.inject(this)
         viewModel = ViewModelProviders.of(this, viewModelFactory).get(ResumeViewModel::class.java)
 
-        val viewManager = LinearLayoutManager(this)
-        val viewAdapter = ResumeAdapter(listener = object : ExperienceExpandListener {
-            override fun onSelected(workExperienceEntry: WorkExperience) {
-                startActivity(
-                    WorkItemActivity.createIntent(this@ResumeActivity, workExperienceEntry),
-                    ActivityOptions.makeSceneTransitionAnimation(this@ResumeActivity).toBundle()
-                )
-            }
-        })
+        setSupportActionBar(toolbar)
 
-        resumeData.apply {
-            setHasFixedSize(true)
-            layoutManager = viewManager
-            adapter = viewAdapter
-        }
+        viewModel.resume.observe(this, Observer<Resume> {resume ->
+            setupContactButton(resume)
+        })
 
         viewModel.isLoading.observe(this, Observer<Boolean> { loading ->
-            val isLoading = loading == true /* fight with nullable r*/
-
-            progress.visibility = if (isLoading) View.VISIBLE else View.GONE
-            resumeData.visibility = if (isLoading) View.GONE else View.VISIBLE
-        })
-
-        viewModel.resume.observe(this, Observer<Resume> { resume ->
-            setupContactButton(resume)
-            resume?.let {
-                no_data.visibility = View.GONE
-                viewAdapter.setData(ResumeEntryBuilder.build(applicationContext, resume))
-
-                title = resume.profile?.fullName
-            } ?: run {
-                no_data.visibility = View.VISIBLE
+            if (loading) {
+                inviteViaEmail.visibility = View.GONE
             }
         })
 
-        viewModel.loadResume()
+        supportFragmentManager
+            .beginTransaction()
+            .add(R.id.content, DashboardFragment.newInstance(), null)
+            .disallowAddToBackStack()
+            .commit()
     }
 
     @SuppressLint("RestrictedApi")
