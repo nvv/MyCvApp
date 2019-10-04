@@ -1,11 +1,11 @@
 package com.mycv.android.ui.adapter.vh
 
-import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.LinearLayout
 import android.widget.TextView
+import androidx.recyclerview.widget.RecyclerView
 import com.mycv.android.R
 import com.mycv.android.ui.adapter.entry.TitledEntry
 import kotlinx.android.synthetic.main.label_value_line.view.*

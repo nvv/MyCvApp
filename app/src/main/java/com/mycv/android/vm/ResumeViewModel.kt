@@ -1,11 +1,12 @@
 package com.mycv.android.vm
 
-import android.arch.lifecycle.MutableLiveData
-import android.arch.lifecycle.ViewModel
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
 import android.content.Intent
 import android.net.Uri
 import com.mycv.android.data.facade.ResumeFacade
 import com.mycv.android.data.model.Resume
+import com.mycv.android.data.model.WorkExperience
 import javax.inject.Inject
 
 class ResumeViewModel @Inject constructor (private val resumeFacade: ResumeFacade) : ViewModel() {

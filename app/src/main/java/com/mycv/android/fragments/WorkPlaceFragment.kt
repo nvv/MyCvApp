@@ -1,32 +1,27 @@
-package com.mycv.android
+package com.mycv.android.fragments
 
-import android.content.Context
-import android.content.Intent
 import android.os.Bundle
-import android.support.v7.app.AppCompatActivity
 import android.view.LayoutInflater
-import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
 import com.bumptech.glide.Glide
+import com.mycv.android.R
 import com.mycv.android.data.model.WorkExperience
 import kotlinx.android.synthetic.main.activity_work_item.*
 import kotlinx.android.synthetic.main.simple_line.view.*
 
-// Since it's very simple activity just to show already ready static data - we don't need ViewModel for it
-class WorkItemActivity : AppCompatActivity() {
+class WorkPlaceFragment : androidx.fragment.app.Fragment(), BaseFragment {
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        return inflater.inflate(R.layout.activity_work_item, container, false)
+    }
 
-        setContentView(R.layout.activity_work_item)
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
 
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        supportActionBar?.setDisplayShowHomeEnabled(true)
-
-        val item : WorkExperience? = intent?.extras?.getParcelable(EXTRA_WORK_ITEM)
+        val item : WorkExperience? = arguments?.getParcelable(ARG_WORK_ITEM)
         item?.let {
-            title = it.companyName
+            //            title = it.companyName
 
             company.text = it.companyName
             Glide.with(logo).load(item.logo).into(logo)
@@ -61,20 +56,18 @@ class WorkItemActivity : AppCompatActivity() {
         }
     }
 
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        if (item.itemId == android.R.id.home) {
-            finish()
-        }
+    override fun getTitle() = arguments?.getParcelable<WorkExperience>(ARG_WORK_ITEM)?.companyName ?: ""
 
-        return super.onOptionsItemSelected(item)
-    }
+    override fun isMenuSupported() = false
 
     companion object {
+        const val ARG_WORK_ITEM = "ARG_WORK_ITEM"
 
-        const val EXTRA_WORK_ITEM = "EXTRA_WORK_ITEM"
-
-        fun createIntent(context: Context, workExperienceEntry: WorkExperience) =
-            Intent(context, WorkItemActivity::class.java).putExtra(EXTRA_WORK_ITEM, workExperienceEntry)
-
+        fun newInstance(workExperience: WorkExperience) = WorkPlaceFragment().apply {
+            val arguments = Bundle()
+            arguments.putParcelable(ARG_WORK_ITEM, workExperience)
+            setArguments(arguments)
+        }
     }
+
 }
