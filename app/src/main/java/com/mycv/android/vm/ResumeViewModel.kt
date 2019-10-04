@@ -6,6 +6,7 @@ import android.content.Intent
 import android.net.Uri
 import com.mycv.android.data.facade.ResumeFacade
 import com.mycv.android.data.model.Resume
+import com.mycv.android.data.model.WorkExperience
 import javax.inject.Inject
 
 class ResumeViewModel @Inject constructor (private val resumeFacade: ResumeFacade) : ViewModel() {

@@ -13,9 +13,11 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
+import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.mycv.android.data.model.Resume
 import com.mycv.android.data.model.WorkExperience
+import com.mycv.android.fragments.BaseFragment
 import com.mycv.android.fragments.DashboardFragment
 import com.mycv.android.ui.adapter.ExperienceExpandListener
 import com.mycv.android.ui.adapter.ResumeAdapter
@@ -29,12 +31,14 @@ import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.content_main.*
 import javax.inject.Inject
 
-class ResumeActivity : DaggerAppCompatActivity() {
+class ResumeActivity : DaggerAppCompatActivity(), NavigatableActivity {
 
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
 
     lateinit var viewModel: ResumeViewModel
+
+    private var reloadMenuItem: MenuItem? = null
 
     @SuppressLint("RestrictedApi")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -56,11 +60,14 @@ class ResumeActivity : DaggerAppCompatActivity() {
             }
         })
 
-        supportFragmentManager
-            .beginTransaction()
-            .add(R.id.content, DashboardFragment.newInstance(), null)
-            .disallowAddToBackStack()
-            .commit()
+        supportFragmentManager.addOnBackStackChangedListener {
+            val fragment = supportFragmentManager.fragments[this.supportFragmentManager.backStackEntryCount - 1] as? BaseFragment
+            title = fragment?.getTitle()
+
+            reloadMenuItem?.isVisible = fragment?.isMenuSupported() == true
+        }
+
+        navigate(DashboardFragment.newInstance())
     }
 
     @SuppressLint("RestrictedApi")
@@ -84,8 +91,25 @@ class ResumeActivity : DaggerAppCompatActivity() {
         }
     }
 
+    override fun navigate(fragment: Fragment) {
+        supportFragmentManager
+            .beginTransaction()
+            .add(R.id.content, fragment, null)
+            .addToBackStack(null)
+            .commit()
+    }
+
+    override fun onBackPressed() {
+        if (supportFragmentManager.backStackEntryCount == 1) {
+            finish()
+        } else {
+            super.onBackPressed()
+        }
+    }
+
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
         menuInflater.inflate(R.menu.menu_main, menu)
+        reloadMenuItem = menu.findItem(R.id.action_reload_resume)
         return true
     }
 

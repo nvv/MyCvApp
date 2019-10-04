@@ -1,6 +1,5 @@
 package com.mycv.android.fragments
 
-import android.app.ActivityOptions
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -9,8 +8,8 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.mycv.android.NavigatableActivity
 import com.mycv.android.R
-import com.mycv.android.WorkItemActivity
 import com.mycv.android.data.model.Resume
 import com.mycv.android.data.model.WorkExperience
 import com.mycv.android.ui.adapter.ExperienceExpandListener
@@ -22,7 +21,7 @@ import kotlinx.android.synthetic.main.content_main.*
 import kotlinx.android.synthetic.main.content_main.view.*
 import javax.inject.Inject
 
-class DashboardFragment : androidx.fragment.app.Fragment() {
+class DashboardFragment : androidx.fragment.app.Fragment(), BaseFragment {
 
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
@@ -32,14 +31,10 @@ class DashboardFragment : androidx.fragment.app.Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.content_main, container, false)
 
-
         val viewManager = LinearLayoutManager(requireContext())
         val viewAdapter = ResumeAdapter(listener = object : ExperienceExpandListener {
             override fun onSelected(workExperienceEntry: WorkExperience) {
-                startActivity(
-                    WorkItemActivity.createIntent(requireActivity(), workExperienceEntry),
-                    ActivityOptions.makeSceneTransitionAnimation(requireActivity()).toBundle()
-                )
+                (activity as? NavigatableActivity)?.navigate(WorkPlaceFragment.newInstance(workExperienceEntry))
             }
         })
 
@@ -79,6 +74,10 @@ class DashboardFragment : androidx.fragment.app.Fragment() {
 
         viewModel.loadResume()
     }
+
+    override fun getTitle() = context?.getString(R.string.landing) ?: ""
+
+    override fun isMenuSupported() = true
 
     companion object {
         fun newInstance() = DashboardFragment()
