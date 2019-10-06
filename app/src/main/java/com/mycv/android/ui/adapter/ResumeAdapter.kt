@@ -101,6 +101,6 @@ class ResumeAdapter(
  * DUMMY APPROACH BUT I DON'T WANT TO ADD EVENT BUS OR RX
  */
 interface ExperienceExpandListener {
-    fun onSelected(workExperienceEntry: WorkExperience)
+    fun onSelected(workExperienceEntry: WorkExperience, sharedViews: List<View>)
 }
 

@@ -6,4 +6,6 @@ interface BaseFragment {
 
     fun isMenuSupported(): Boolean
 
+    fun hasBackNavigation(): Boolean
+
 }

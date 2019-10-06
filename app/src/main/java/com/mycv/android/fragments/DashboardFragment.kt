@@ -8,6 +8,7 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.transition.Fade
 import com.mycv.android.NavigatableActivity
 import com.mycv.android.R
 import com.mycv.android.data.model.Resume
@@ -31,30 +32,6 @@ class DashboardFragment : androidx.fragment.app.Fragment(), BaseFragment {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val view = inflater.inflate(R.layout.content_main, container, false)
 
-        val viewManager = LinearLayoutManager(requireContext())
-        val viewAdapter = ResumeAdapter(listener = object : ExperienceExpandListener {
-            override fun onSelected(workExperienceEntry: WorkExperience) {
-                (activity as? NavigatableActivity)?.navigate(WorkPlaceFragment.newInstance(workExperienceEntry))
-            }
-        })
-
-        view.resumeData.apply {
-            setHasFixedSize(true)
-            layoutManager = viewManager
-            adapter = viewAdapter
-        }
-
-
-        return view
-    }
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-        AndroidSupportInjection.inject(this)
-
-        viewModel = ViewModelProviders.of(activity!!, viewModelFactory).get(ResumeViewModel::class.java)
-
         viewModel.isLoading.observe(this, Observer<Boolean> { loading ->
             val isLoading = loading == true /* fight with nullable r*/
 
@@ -72,12 +49,46 @@ class DashboardFragment : androidx.fragment.app.Fragment(), BaseFragment {
             }
         })
 
-        viewModel.loadResume()
+
+        val viewManager = LinearLayoutManager(requireContext())
+        val viewAdapter = ResumeAdapter(listener = object : ExperienceExpandListener {
+
+            override fun onSelected(workExperienceEntry: WorkExperience, sharedViews: List<View>) {
+
+                val fragment = WorkPlaceFragment.newInstance(workExperienceEntry)
+                fragment.sharedElementEnterTransition = DetailsTransition()
+                fragment.enterTransition = Fade()
+                fragment.sharedElementReturnTransition = DetailsTransition()
+
+                (activity as? NavigatableActivity)?.navigate(fragment, sharedViews)
+            }
+        })
+
+        view.resumeData.apply {
+            setHasFixedSize(true)
+            layoutManager = viewManager
+            adapter = viewAdapter
+        }
+
+
+        return view
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        AndroidSupportInjection.inject(this)
+
+        activity?.let {
+            viewModel = ViewModelProviders.of(it, viewModelFactory).get(ResumeViewModel::class.java)
+            viewModel.loadResume()
+        }
     }
 
     override fun getTitle() = context?.getString(R.string.landing) ?: ""
 
     override fun isMenuSupported() = true
+
+    override fun hasBackNavigation() = false
 
     companion object {
         fun newInstance() = DashboardFragment()
