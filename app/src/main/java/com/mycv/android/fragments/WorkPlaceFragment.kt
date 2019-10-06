@@ -60,6 +60,8 @@ class WorkPlaceFragment : androidx.fragment.app.Fragment(), BaseFragment {
 
     override fun isMenuSupported() = false
 
+    override fun hasBackNavigation() = true
+
     companion object {
         const val ARG_WORK_ITEM = "ARG_WORK_ITEM"
 

@@ -16,6 +16,7 @@
 
         <ImageView
                 android:id="@+id/logo"
+                android:transitionName="logo"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintEnd_toStartOf="@id/company"
                 app:layout_constraintTop_toTopOf="parent"
@@ -25,6 +26,7 @@
 
         <TextView
                 android:id="@+id/company"
+                android:transitionName="company"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/logo"
                 android:layout_marginStart="@dimen/margin_small"

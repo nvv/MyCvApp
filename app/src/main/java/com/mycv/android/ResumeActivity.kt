@@ -50,6 +50,10 @@ class ResumeActivity : DaggerAppCompatActivity(), NavigatableActivity {
 
         setSupportActionBar(toolbar)
 
+        toolbar.setNavigationOnClickListener {
+            onBackPressed()
+        }
+
         viewModel.resume.observe(this, Observer<Resume> {resume ->
             setupContactButton(resume)
         })
@@ -60,14 +64,24 @@ class ResumeActivity : DaggerAppCompatActivity(), NavigatableActivity {
             }
         })
 
+        supportActionBar?.setDisplayShowHomeEnabled(false)
         supportFragmentManager.addOnBackStackChangedListener {
-            val fragment = supportFragmentManager.fragments[this.supportFragmentManager.backStackEntryCount - 1] as? BaseFragment
-            title = fragment?.getTitle()
+            val fragment = supportFragmentManager.fragments[this.supportFragmentManager.fragments.size - 1] as? BaseFragment
 
-            reloadMenuItem?.isVisible = fragment?.isMenuSupported() == true
+            fragment?.let {
+                title = it.getTitle()
+
+                reloadMenuItem?.isVisible = it.isMenuSupported()
+                setBackVisibility(it.hasBackNavigation())
+            }
         }
 
         navigate(DashboardFragment.newInstance())
+    }
+
+    private fun setBackVisibility(visible: Boolean) {
+        supportActionBar?.setDisplayHomeAsUpEnabled(visible)
+        supportActionBar?.setDisplayShowHomeEnabled(visible)
     }
 
     @SuppressLint("RestrictedApi")
@@ -91,20 +105,20 @@ class ResumeActivity : DaggerAppCompatActivity(), NavigatableActivity {
         }
     }
 
-    override fun navigate(fragment: Fragment) {
-        supportFragmentManager
-            .beginTransaction()
-            .add(R.id.content, fragment, null)
-            .addToBackStack(null)
-            .commit()
-    }
+    override fun navigate(fragment: Fragment, sharedViews: List<View>?) {
+        val transaction = supportFragmentManager.beginTransaction()
 
-    override fun onBackPressed() {
-        if (supportFragmentManager.backStackEntryCount == 1) {
-            finish()
+        if (sharedViews != null) {
+            sharedViews.forEach {
+                transaction.addSharedElement(it, it.getTag(R.id.transition_name)?.toString() ?: "")
+            }
+
+            transaction.replace(R.id.content, fragment, fragment.tag)
         } else {
-            super.onBackPressed()
+            transaction.add(R.id.content, fragment, null)
         }
+
+        transaction.addToBackStack(null).commit()
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {

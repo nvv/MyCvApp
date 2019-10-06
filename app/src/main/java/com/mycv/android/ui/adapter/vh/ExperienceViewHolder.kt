@@ -2,6 +2,7 @@ package com.mycv.android.ui.adapter.vh
 
 import android.view.LayoutInflater
 import android.view.View
+import androidx.core.view.ViewCompat
 import com.bumptech.glide.Glide
 import com.mycv.android.R
 import com.mycv.android.ui.adapter.ExperienceExpandListener
@@ -24,8 +25,14 @@ class ExperienceViewHolder(view: View, private val listener: ExperienceExpandLis
 
                     details.addView(row)
 
+                    ViewCompat.setTransitionName(row.logo, item.companyName + "_logo")
+                    ViewCompat.setTransitionName(row.company, item.companyName + "_title")
+
+                    row.logo.setTag(R.id.transition_name, "logo")
+                    row.company.setTag(R.id.transition_name, "company")
+
                     row.setOnClickListener {
-                        listener?.onSelected(item)
+                        listener?.onSelected(item, listOf(row.logo, row.company))
                     }
                 }
             }
