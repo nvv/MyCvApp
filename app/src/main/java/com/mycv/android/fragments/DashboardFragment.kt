@@ -1,5 +1,6 @@
 package com.mycv.android.fragments
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -74,9 +75,13 @@ class DashboardFragment : androidx.fragment.app.Fragment(), BaseFragment {
         return view
     }
 
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        AndroidSupportInjection.inject(this)
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        AndroidSupportInjection.inject(this)
 
         activity?.let {
             viewModel = ViewModelProviders.of(it, viewModelFactory).get(ResumeViewModel::class.java)
