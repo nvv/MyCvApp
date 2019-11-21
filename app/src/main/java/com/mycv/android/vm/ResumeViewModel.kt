@@ -6,7 +6,8 @@ import android.content.Intent
 import android.net.Uri
 import com.mycv.android.data.facade.ResumeFacade
 import com.mycv.android.data.model.Resume
-import com.mycv.android.data.model.WorkExperience
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 class ResumeViewModel @Inject constructor (private val resumeFacade: ResumeFacade) : ViewModel() {
@@ -17,10 +18,10 @@ class ResumeViewModel @Inject constructor (private val resumeFacade: ResumeFacad
 
     fun loadResume(force: Boolean = false) {
         isLoading.value = true
-        Thread(Runnable {
+        GlobalScope.launch {
             resume.postValue(resumeFacade.getResume(force))
             isLoading.postValue(false)
-        }).start()
+        }
     }
 
     fun contactViaEmail(to: String, subj: String) =
