@@ -13,6 +13,7 @@ import javax.inject.Singleton
         ActivityModule::class,
         ViewModelModule::class,
         FacadaModule::class,
+        RetrofitModule::class,
         AndroidSupportInjectionModule::class]
 )
 @Singleton
