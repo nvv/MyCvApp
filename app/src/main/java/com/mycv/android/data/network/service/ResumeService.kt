@@ -1,9 +1,7 @@
-package com.mycv.android.data.service
+package com.mycv.android.data.network.service
 
 import android.content.Context
-import com.google.gson.Gson
 import com.mycv.android.R
-import com.mycv.android.data.model.Resume
 import java.net.URL
 
 

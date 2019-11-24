@@ -4,7 +4,7 @@ import com.google.gson.Gson
 import com.mycv.android.core.NetworkManager
 import com.mycv.android.core.Storage
 import com.mycv.android.data.model.Resume
-import com.mycv.android.data.service.ResumeService
+import com.mycv.android.data.network.retrofitservice.ResumeService
 import javax.inject.Singleton
 
 @Singleton
@@ -12,18 +12,20 @@ class ResumeFacade constructor(private val service: ResumeService,
                                private val manager: NetworkManager,
                                private val storage: Storage) {
 
-    fun getResume(force: Boolean = false) : Resume? {
-        val json: String?
+    suspend fun getResume(force: Boolean = false) : Resume? {
+        val resume: Resume?
+
+        val gson = Gson()
         if (manager.isNetworkAvailable() && (isTimeToUpdate() || force)) {
-            json = service.getResumeRaw()
-            json?.let {
-                storage.putResumeJsonToCache(it)
+            resume = service.loadResume()
+            resume?.let {
+                storage.putResumeJsonToCache(gson.toJson(resume))
             }
         } else {
-            json = storage.getResumeJson()
+            resume = gson.fromJson(storage.getResumeJson(), Resume::class.java)
         }
 
-        return Gson().fromJson(json, Resume::class.java)
+        return resume
     }
 
     private fun isTimeToUpdate() = System.currentTimeMillis() - storage.resumeUpdateTimestap > RELOAD_RESUME_PERIOD

@@ -3,7 +3,7 @@ package com.mycv.android
 import com.mycv.android.core.NetworkManager
 import com.mycv.android.core.Storage
 import com.mycv.android.data.facade.ResumeFacade
-import com.mycv.android.data.service.ResumeService
+import com.mycv.android.data.network.service.ResumeService
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verifyOrder
