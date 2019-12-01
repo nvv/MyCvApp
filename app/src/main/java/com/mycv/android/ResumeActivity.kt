@@ -86,7 +86,7 @@ class ResumeActivity : DaggerAppCompatActivity(), NavigatableActivity {
 
     @SuppressLint("RestrictedApi")
     private fun setupContactButton(resume: Resume?) {
-        val to = resume?.contacts?.get("Email")
+        val to = resume?.contacts?.contacts?.get("Email")
 
         inviteViaEmail.visibility = if (!to.isNullOrEmpty()) View.VISIBLE else View.GONE
         to?.let {

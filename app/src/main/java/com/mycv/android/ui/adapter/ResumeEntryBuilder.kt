@@ -14,13 +14,13 @@ object ResumeEntryBuilder {
             resume.profile?.let {
                 array.add(ProfileEntry(it))
             }
-            resume.contacts?.let {
+            resume.contacts?.contacts?.let {
                 array.add(ContactsEntry(context.getString(R.string.contacts), it))
             }
             resume.objectiveNotes?.let {
-                array.add(ResumeObjectiveEntry(context.getString(R.string.resume_objective), it))
+                array.add(ResumeObjectiveEntry(context.getString(R.string.resume_objective), it.notes))
             }
-            resume.skillMap?.let {
+            resume.skillMap?.skills?.let {
                 array.add(SkillsEntry(context.getString(R.string.skills), it))
             }
             resume.experience?.let {

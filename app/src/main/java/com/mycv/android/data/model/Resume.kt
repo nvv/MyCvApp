@@ -4,9 +4,9 @@ import com.google.gson.annotations.SerializedName
 
 data class Resume(
     @SerializedName("profile") var profile: Profile? = null,
-    @SerializedName("contacts") var contacts: Map<String, String>? = null,
-    @SerializedName("objective") var objectiveNotes: List<String>? = null,
-    @SerializedName("skills") var skillMap: Map<String,List<String>>? = null,
+    @SerializedName("contacts") var contacts: Contacts? = null,
+    @SerializedName("objective") var objectiveNotes: ObjectiveNotes? = null,
+    @SerializedName("skills") var skillMap: Skills? = null,
     @SerializedName("experience") var experience: List<WorkExperience>? = null,
     @SerializedName("education") var education: List<EducationInstitution>? = null
 )

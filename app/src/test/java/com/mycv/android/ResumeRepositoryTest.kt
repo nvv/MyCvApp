@@ -2,21 +2,20 @@ package com.mycv.android
 
 import com.mycv.android.core.NetworkManager
 import com.mycv.android.core.Storage
-import com.mycv.android.data.facade.ResumeFacade
-import com.mycv.android.data.network.service.ResumeService
+import com.mycv.android.data.facade.ResumeRepository
 import io.mockk.every
 import io.mockk.mockk
 import io.mockk.verifyOrder
 import org.junit.Assert
 import org.junit.Test
 
-class ResumeFacadeTest {
+class ResumeRepositoryTest {
 
     val resumeService = mockk<ResumeService>()
     val networkManager = mockk<NetworkManager>()
     val storage = mockk<Storage>()
 
-    val resumeFacade = ResumeFacade(resumeService, networkManager, storage)
+    val resumeFacade = ResumeRepository(resumeService, networkManager, storage)
 
     @Test
     fun `test check null response from empty json`() {
@@ -97,7 +96,7 @@ class ResumeFacadeTest {
     fun `test time to update resume not empty response`() {
 
         every { networkManager.isNetworkAvailable() } returns true
-        every { storage.resumeUpdateTimestap } returns ResumeFacade.RELOAD_RESUME_PERIOD - 1000L
+        every { storage.resumeUpdateTimestap } returns ResumeRepository.RELOAD_RESUME_PERIOD - 1000L
         every { resumeService.getResumeRaw() } returns RESPONSE_PROFILE_ONLY
         every { storage.putResumeJsonToCache(RESPONSE_PROFILE_ONLY) } returns Unit
 
