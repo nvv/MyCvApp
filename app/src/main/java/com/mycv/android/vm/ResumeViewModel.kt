@@ -4,13 +4,13 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import android.content.Intent
 import android.net.Uri
-import com.mycv.android.data.facade.ResumeFacade
+import com.mycv.android.data.facade.ResumeRepository
 import com.mycv.android.data.model.Resume
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-class ResumeViewModel @Inject constructor (private val resumeFacade: ResumeFacade) : ViewModel() {
+class ResumeViewModel @Inject constructor (private val resumeRepository: ResumeRepository) : ViewModel() {
 
     val resume = MutableLiveData<Resume>()
 
@@ -19,7 +19,7 @@ class ResumeViewModel @Inject constructor (private val resumeFacade: ResumeFacad
     fun loadResume(force: Boolean = false) {
         isLoading.value = true
         GlobalScope.launch {
-            resume.postValue(resumeFacade.getResume(force))
+            resume.postValue(resumeRepository.getResume(force))
             isLoading.postValue(false)
         }
     }
