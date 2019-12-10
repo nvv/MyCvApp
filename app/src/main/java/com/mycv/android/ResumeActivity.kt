@@ -1,34 +1,28 @@
 package com.mycv.android
 
 import android.annotation.SuppressLint
-import android.app.ActivityOptions
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
-import androidx.lifecycle.ViewModelProviders
 import android.content.ActivityNotFoundException
 import android.content.Intent
+import android.graphics.drawable.Drawable
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity;
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelProviders
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.target.CustomTarget
+import com.bumptech.glide.request.transition.Transition
 import com.mycv.android.data.model.Resume
-import com.mycv.android.data.model.WorkExperience
 import com.mycv.android.fragments.BaseFragment
 import com.mycv.android.fragments.DashboardFragment
-import com.mycv.android.ui.adapter.ExperienceExpandListener
-import com.mycv.android.ui.adapter.ResumeAdapter
-import com.mycv.android.ui.adapter.ResumeEntryBuilder
 import com.mycv.android.vm.ResumeViewModel
 import dagger.android.AndroidInjection
-import dagger.android.support.AndroidSupportInjection
 import dagger.android.support.DaggerAppCompatActivity
-
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.content_main.*
 import javax.inject.Inject
 
 class ResumeActivity : DaggerAppCompatActivity(), NavigatableActivity {
@@ -48,13 +42,7 @@ class ResumeActivity : DaggerAppCompatActivity(), NavigatableActivity {
         AndroidInjection.inject(this)
         viewModel = ViewModelProviders.of(this, viewModelFactory).get(ResumeViewModel::class.java)
 
-        setSupportActionBar(toolbar)
-
-        toolbar.setNavigationOnClickListener {
-            onBackPressed()
-        }
-
-        viewModel.resume.observe(this, Observer<Resume> {resume ->
+        viewModel.resume.observe(this, Observer<Resume> { resume ->
             setupContactButton(resume)
         })
 
@@ -64,24 +52,37 @@ class ResumeActivity : DaggerAppCompatActivity(), NavigatableActivity {
             }
         })
 
-        supportActionBar?.setDisplayShowHomeEnabled(false)
+        animatedHeader.setUp(title = "Vlad Namashko", subTitle = "Software Engineer", toolbarTitle = "Vlad Namashko")
+
         supportFragmentManager.addOnBackStackChangedListener {
-            val fragment = supportFragmentManager.fragments[this.supportFragmentManager.fragments.size - 1] as? BaseFragment
+            val fragment =
+                supportFragmentManager.fragments[this.supportFragmentManager.fragments.size - 1] as? BaseFragment
 
             fragment?.let {
-                title = it.getTitle()
-
                 reloadMenuItem?.isVisible = it.isMenuSupported()
-                setBackVisibility(it.hasBackNavigation())
+//                setBackVisibility(it.hasBackNavigation())
             }
         }
 
         navigate(DashboardFragment.newInstance())
     }
 
+    fun setPhoto(url: String) {
+        Glide.with(animatedHeader).asDrawable().load(url).into(object : CustomTarget<Drawable>() {
+            override fun onLoadCleared(placeholder: Drawable?) {
+
+            }
+
+            override fun onResourceReady(resource: Drawable, transition: Transition<in Drawable>?) {
+                animatedHeader.setUp(imageDrawable = resource)
+            }
+
+        })
+    }
+
     private fun setBackVisibility(visible: Boolean) {
-        supportActionBar?.setDisplayHomeAsUpEnabled(visible)
-        supportActionBar?.setDisplayShowHomeEnabled(visible)
+//        supportActionBar?.setDisplayHomeAsUpEnabled(visible)
+//        supportActionBar?.setDisplayShowHomeEnabled(visible)
     }
 
     @SuppressLint("RestrictedApi")
@@ -99,7 +100,11 @@ class ResumeActivity : DaggerAppCompatActivity(), NavigatableActivity {
                         )
                     )
                 } catch (ex: ActivityNotFoundException) {
-                    Toast.makeText(this@ResumeActivity, getString(R.string.no_client_installed), Toast.LENGTH_SHORT).show();
+                    Toast.makeText(
+                        this@ResumeActivity,
+                        getString(R.string.no_client_installed),
+                        Toast.LENGTH_SHORT
+                    ).show()
                 }
             }
         }

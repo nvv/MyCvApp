@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.transition.Fade
 import com.mycv.android.NavigatableActivity
 import com.mycv.android.R
+import com.mycv.android.ResumeActivity
 import com.mycv.android.data.model.Resume
 import com.mycv.android.data.model.WorkExperience
 import com.mycv.android.ui.adapter.ExperienceExpandListener
@@ -44,6 +45,8 @@ class DashboardFragment : androidx.fragment.app.Fragment(), BaseFragment {
             resume?.let {
                 noData.visibility = View.GONE
                 (resumeData.adapter as ResumeAdapter).setData(ResumeEntryBuilder.build(requireContext(), resume))
+
+                (activity as ResumeActivity).setPhoto(resume.profile?.photo!!)
 
             } ?: run {
                 noData.visibility = View.VISIBLE
