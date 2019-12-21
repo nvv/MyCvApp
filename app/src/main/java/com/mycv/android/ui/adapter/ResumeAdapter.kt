@@ -23,7 +23,6 @@ class ResumeAdapter(
 
     override fun getItemViewType(position: Int) =
         when (data?.get(position)) {
-            is ProfileEntry -> TYPE_PROFILE
             is ContactsEntry -> TYPE_CONTACTS
             is SkillsEntry -> TYPE_SKILLS
             is ResumeObjectiveEntry -> TYPE_RESUME_OBJECTIVE
@@ -35,7 +34,6 @@ class ResumeAdapter(
     override fun onCreateViewHolder(parent: ViewGroup, type: Int): TitledViewViewHolder {
 
         return when (type) {
-            TYPE_PROFILE -> ProfileViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.profile_resume_row, parent, false))
             TYPE_CONTACTS -> ContactsViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.simple_resume_row, parent, false))
             TYPE_SKILLS -> SkillsViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.simple_resume_row, parent, false))
             TYPE_RESUME_OBJECTIVE -> ResumeObjectiveViewHolder(LayoutInflater.from(parent.context).inflate(R.layout.simple_resume_row, parent, false))
@@ -87,7 +85,6 @@ class ResumeAdapter(
         private const val ROTATION_ANIM_DURATION = 200L
 
         private const val TYPE_DEFAULT = 0
-        private const val TYPE_PROFILE = 1
         private const val TYPE_CONTACTS = 2
         private const val TYPE_SKILLS = 3
         private const val TYPE_RESUME_OBJECTIVE = 4

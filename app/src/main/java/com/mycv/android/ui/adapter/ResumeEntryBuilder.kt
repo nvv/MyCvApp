@@ -11,9 +11,6 @@ object ResumeEntryBuilder {
         val array = mutableListOf<TitledEntry>()
 
         resume.let {
-            resume.profile?.let {
-                array.add(ProfileEntry(it))
-            }
             resume.contacts?.contacts?.let {
                 array.add(ContactsEntry(context.getString(R.string.contacts), it))
             }
