@@ -44,9 +44,6 @@ class DashboardFragment : androidx.fragment.app.Fragment(), BaseFragment {
             resume?.let {
                 noData.visibility = View.GONE
                 (resumeData.adapter as ResumeAdapter).setData(ResumeEntryBuilder.build(requireContext(), resume))
-
-                (activity as ResumeActivity).setPhoto(resume.profile?.photo!!)
-
             } ?: run {
                 noData.visibility = View.VISIBLE
             }

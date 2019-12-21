@@ -43,7 +43,20 @@ class ResumeActivity : DaggerAppCompatActivity(), NavigatableActivity {
         viewModel = ViewModelProviders.of(this, viewModelFactory).get(ResumeViewModel::class.java)
 
         viewModel.resume.observe(this, Observer<Resume> { resume ->
-            setupContactButton(resume)
+            resume.profile?.let {
+                animatedHeader.setUp(
+                    title = it.fullName,
+                    subTitle = it.profession,
+                    toolbarTitle = it.fullName
+                )
+                it.photo?.let { url ->
+                    viewModel.load(animatedHeader.context, url)
+                } ?: run {
+                    // TODO
+                }
+            } ?: run {
+                // TODO
+            }
         })
 
         viewModel.isLoading.observe(this, Observer<Boolean> { loading ->
@@ -52,7 +65,9 @@ class ResumeActivity : DaggerAppCompatActivity(), NavigatableActivity {
             }
         })
 
-        animatedHeader.setUp(title = "Vlad Namashko", subTitle = "Software Engineer", toolbarTitle = "Vlad Namashko")
+        viewModel.profileDrawable.observe(this, Observer<Drawable> {
+            animatedHeader.setUp(imageDrawable = it)
+        })
 
         supportFragmentManager.addOnBackStackChangedListener {
             val fragment =
@@ -69,19 +84,6 @@ class ResumeActivity : DaggerAppCompatActivity(), NavigatableActivity {
         }
 
         navigate(DashboardFragment.newInstance())
-    }
-
-    fun setPhoto(url: String) {
-        Glide.with(animatedHeader).asDrawable().load(url).into(object : CustomTarget<Drawable>() {
-            override fun onLoadCleared(placeholder: Drawable?) {
-
-            }
-
-            override fun onResourceReady(resource: Drawable, transition: Transition<in Drawable>?) {
-                animatedHeader.setUp(imageDrawable = resource)
-            }
-
-        })
     }
 
     @SuppressLint("RestrictedApi")
