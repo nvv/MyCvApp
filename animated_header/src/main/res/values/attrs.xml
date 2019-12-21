@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="AnimatedHeader">
+        <attr name="expanded_size" format="dimension" />
+        <attr name="collapsed_size" format="dimension" />
+    </declare-styleable>
+</resources>

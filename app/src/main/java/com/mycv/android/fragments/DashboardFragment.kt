@@ -8,10 +8,10 @@ import android.view.ViewGroup
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProviders
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.transition.Fade
 import com.mycv.android.NavigatableActivity
 import com.mycv.android.R
+import com.mycv.android.ResumeActivity
 import com.mycv.android.data.model.Resume
 import com.mycv.android.data.model.WorkExperience
 import com.mycv.android.ui.adapter.ExperienceExpandListener
@@ -44,14 +44,12 @@ class DashboardFragment : androidx.fragment.app.Fragment(), BaseFragment {
             resume?.let {
                 noData.visibility = View.GONE
                 (resumeData.adapter as ResumeAdapter).setData(ResumeEntryBuilder.build(requireContext(), resume))
-
             } ?: run {
                 noData.visibility = View.VISIBLE
             }
         })
 
 
-        val viewManager = LinearLayoutManager(requireContext())
         val viewAdapter = ResumeAdapter(listener = object : ExperienceExpandListener {
 
             override fun onSelected(workExperienceEntry: WorkExperience, sharedViews: List<View>) {
@@ -67,7 +65,6 @@ class DashboardFragment : androidx.fragment.app.Fragment(), BaseFragment {
 
         view.resumeData.apply {
             setHasFixedSize(true)
-            layoutManager = viewManager
             adapter = viewAdapter
         }
 
