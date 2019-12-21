@@ -3,6 +3,7 @@ package com.mycv.android.animated_header
 import android.content.Context
 import android.graphics.drawable.Drawable
 import android.util.AttributeSet
+import android.view.View
 import android.widget.TextView
 import androidx.appcompat.widget.Toolbar
 import com.google.android.material.appbar.AppBarLayout
@@ -28,6 +29,9 @@ class AnimatedHeader @JvmOverloads constructor(
     private var toolbarTitle: TextView
 
     private var calculatedWidth: Int = 0
+    private var backButtonWidth: Int = 0
+
+    var backClickListener: OnClickListener? = null
 
     init {
         inflate(context, R.layout.animated_header, this)
@@ -44,11 +48,16 @@ class AnimatedHeader @JvmOverloads constructor(
 
         post {
             calculatedWidth = width
+            backButtonWidth = backButton.width
         }
 
         image.layoutParams.apply {
             width = expandedImageSize.toInt()
             height = expandedImageSize.toInt()
+        }
+
+        backButton?.setOnClickListener {
+            backClickListener?.onClick(it)
         }
 
         setupScrollListener()
@@ -67,6 +76,24 @@ class AnimatedHeader @JvmOverloads constructor(
         }
     }
 
+    /**
+     * Toggle back button and profile image view visibility.
+     */
+    fun setBackButtonVisibility(isBackVisible: Boolean) {
+        backButton.visibility = if (isBackVisible) View.VISIBLE else View.GONE
+        image.visibility = if (isBackVisible) View.INVISIBLE else View.VISIBLE
+
+        val initialStartMargin = (toolbar.layoutParams as MarginLayoutParams).marginStart
+
+        val params = toolbarTitle.layoutParams as MarginLayoutParams
+        params.marginStart =
+            if (isBackVisible) collapsedImageSize.toInt() - initialStartMargin - backButtonWidth else
+            collapsedImageSize.toInt() + initialStartMargin
+
+        toolbarTitle.layoutParams = params
+
+    }
+
     private fun setText(view: TextView, text: String? = null) {
         text?.let {
             view.text = it
@@ -75,8 +102,6 @@ class AnimatedHeader @JvmOverloads constructor(
 
     private fun setupScrollListener() {
         val leftMargin = (toolbar.layoutParams as MarginLayoutParams).leftMargin
-
-        (toolbarTitle.layoutParams as MarginLayoutParams).leftMargin = leftMargin * 2 + collapsedImageSize.toInt()
 
         addOnOffsetChangedListener(OnOffsetChangedListener { _, dy ->
             val offset = abs(dy / totalScrollRange.toFloat())

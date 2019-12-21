@@ -60,8 +60,12 @@ class ResumeActivity : DaggerAppCompatActivity(), NavigatableActivity {
 
             fragment?.let {
                 reloadMenuItem?.isVisible = it.isMenuSupported()
-//                setBackVisibility(it.hasBackNavigation())
+                animatedHeader.setBackButtonVisibility(it.hasBackNavigation())
             }
+        }
+
+        animatedHeader.backClickListener = View.OnClickListener {
+            onBackPressed()
         }
 
         navigate(DashboardFragment.newInstance())
@@ -78,11 +82,6 @@ class ResumeActivity : DaggerAppCompatActivity(), NavigatableActivity {
             }
 
         })
-    }
-
-    private fun setBackVisibility(visible: Boolean) {
-//        supportActionBar?.setDisplayHomeAsUpEnabled(visible)
-//        supportActionBar?.setDisplayShowHomeEnabled(visible)
     }
 
     @SuppressLint("RestrictedApi")
