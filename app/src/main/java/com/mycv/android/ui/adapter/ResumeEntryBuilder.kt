@@ -3,6 +3,7 @@ package com.mycv.android.ui.adapter
 import android.content.Context
 import com.mycv.android.R
 import com.mycv.android.data.model.Resume
+import com.mycv.android.ui.adapter.viewitem.ContactViewItem
 import com.mycv.android.ui.adapter.entry.*
 
 object ResumeEntryBuilder {
@@ -11,8 +12,11 @@ object ResumeEntryBuilder {
         val array = mutableListOf<TitledEntry>()
 
         resume.let {
-            resume.contacts?.contacts?.let {
-                array.add(ContactsEntry(context.getString(R.string.contacts), it))
+            resume.contacts?.contacts?.let { contacts ->
+                array.add(ContactsEntry(context.getString(R.string.contacts),
+                    contacts.filter { it.key != "address" }.map {
+                    ContactViewItem(it.key, it.value)
+                }))
             }
             resume.objectiveNotes?.let {
                 array.add(ResumeObjectiveEntry(context.getString(R.string.resume_objective), it.notes))

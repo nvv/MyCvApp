@@ -36,7 +36,7 @@
     </style>
 
     <style name="SectionHeader" parent="TextAppearance.AppCompat.Headline">
-        <item name="android:textColor">@color/colorPrimary</item>
+        <item name="android:textColor">?android:attr/textColorPrimary</item>
     </style>
 
     <style name="Base.TextAppearance.AppCompat.Headline.Inverse" >

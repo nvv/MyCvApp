@@ -1,3 +1,5 @@
 package com.mycv.android.ui.adapter.entry
 
-class ContactsEntry(titleValue: String, val contacts: Map<String, String>) : TitledEntry(titleValue)
+import com.mycv.android.ui.adapter.viewitem.ContactViewItem
+
+class ContactsEntry(titleValue: String, val contacts: List<ContactViewItem>?) : TitledEntry(titleValue)
