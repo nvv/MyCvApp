@@ -11,12 +11,11 @@ import androidx.lifecycle.ViewModelProviders
 import androidx.transition.Fade
 import com.mycv.android.NavigatableActivity
 import com.mycv.android.R
-import com.mycv.android.ResumeActivity
+import com.mycv.android.data.mapper.ResumeToResumeViewItemMapper
 import com.mycv.android.data.model.Resume
 import com.mycv.android.data.model.WorkExperience
 import com.mycv.android.ui.adapter.ExperienceExpandListener
 import com.mycv.android.ui.adapter.ResumeAdapter
-import com.mycv.android.ui.adapter.ResumeEntryBuilder
 import com.mycv.android.vm.ResumeViewModel
 import dagger.android.support.AndroidSupportInjection
 import kotlinx.android.synthetic.main.content_main.*
@@ -27,6 +26,9 @@ class DashboardFragment : androidx.fragment.app.Fragment(), BaseFragment {
 
     @Inject
     lateinit var viewModelFactory: ViewModelProvider.Factory
+
+    @Inject
+    lateinit var mapper: ResumeToResumeViewItemMapper
 
     lateinit var viewModel: ResumeViewModel
 
@@ -43,7 +45,7 @@ class DashboardFragment : androidx.fragment.app.Fragment(), BaseFragment {
         viewModel.resume.observe(this, Observer<Resume> { resume ->
             resume?.let {
                 noData.visibility = View.GONE
-                (resumeData.adapter as ResumeAdapter).setData(ResumeEntryBuilder.build(requireContext(), resume))
+                (resumeData.adapter as ResumeAdapter).setData(mapper.map(resume))
             } ?: run {
                 noData.visibility = View.VISIBLE
             }

@@ -3,17 +3,17 @@ package com.mycv.android.ui.adapter.vh
 import android.view.LayoutInflater
 import android.view.View
 import com.mycv.android.R
-import com.mycv.android.ui.adapter.entry.EducationEntry
-import com.mycv.android.ui.adapter.entry.TitledEntry
+import com.mycv.android.ui.adapter.viewitem.EducationViewItem
+import com.mycv.android.ui.adapter.viewitem.ViewItem
 import kotlinx.android.synthetic.main.education_institution_row.view.*
 
 class EducationViewHolder(view: View): TitledViewViewHolder(view) {
 
-    override fun bind(entry: TitledEntry) {
+    override fun bind(entry: ViewItem) {
 
         details?.let { details ->
             details.removeAllViews()
-            (entry as? EducationEntry)?.let {
+            (entry as? EducationViewItem)?.let {
                 it.educationInstitutions.forEach { item ->
                     val line = LayoutInflater.from(itemView.context)
                         .inflate(R.layout.education_institution_row, details, false)

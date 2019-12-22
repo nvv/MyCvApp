@@ -5,6 +5,7 @@ import android.net.ConnectivityManager
 import com.mycv.android.core.NetworkManager
 import com.mycv.android.core.Storage
 import com.mycv.android.data.facade.ResumeRepository
+import com.mycv.android.data.mapper.ResumeToResumeViewItemMapper
 import com.mycv.android.data.network.retrofitservice.ResumeService
 import dagger.Module
 import dagger.Provides
@@ -21,6 +22,12 @@ class FacadaModule {
             NetworkManager(context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager),
             Storage(context)
         )
+    }
+
+    @Provides
+    @Singleton
+    internal fun provideResumeToResumeViewItemMapper(context: Context): ResumeToResumeViewItemMapper {
+        return ResumeToResumeViewItemMapper(context)
     }
 
 }

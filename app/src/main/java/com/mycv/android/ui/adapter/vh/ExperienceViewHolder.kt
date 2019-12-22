@@ -6,17 +6,17 @@ import androidx.core.view.ViewCompat
 import com.bumptech.glide.Glide
 import com.mycv.android.R
 import com.mycv.android.ui.adapter.ExperienceExpandListener
-import com.mycv.android.ui.adapter.entry.ExperienceEntry
-import com.mycv.android.ui.adapter.entry.TitledEntry
+import com.mycv.android.ui.adapter.viewitem.ExpirienceViewItem
+import com.mycv.android.ui.adapter.viewitem.ViewItem
 import kotlinx.android.synthetic.main.experience_row_compact.view.*
 
 class ExperienceViewHolder(view: View, private val listener: ExperienceExpandListener? = null) : TitledViewViewHolder(view) {
 
-    override fun bind(entry: TitledEntry) {
+    override fun bind(entry: ViewItem) {
 
         details?.let { details ->
             details.removeAllViews()
-            (entry as? ExperienceEntry)?.let {
+            (entry as? ExpirienceViewItem)?.let {
                 it.experienceEntries.forEach { item ->
                     val row = LayoutInflater.from(details.context).inflate(R.layout.experience_row_compact, details, false)
 

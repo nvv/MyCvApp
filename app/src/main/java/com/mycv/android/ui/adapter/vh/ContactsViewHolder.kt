@@ -5,16 +5,16 @@ import android.view.View
 import android.widget.LinearLayout
 import com.mycv.android.R
 import com.mycv.android.ui.adapter.viewitem.ContactViewItem
-import com.mycv.android.ui.adapter.entry.ContactsEntry
-import com.mycv.android.ui.adapter.entry.TitledEntry
+import com.mycv.android.ui.adapter.viewitem.ContactsViewItem
+import com.mycv.android.ui.adapter.viewitem.ViewItem
 import kotlinx.android.synthetic.main.contact_line.view.*
 
 class ContactsViewHolder(view: View): TitledViewViewHolder(view) {
 
-    override fun bind(entry: TitledEntry) {
+    override fun bind(viewItem: ViewItem) {
         details?.let { details ->
             details.removeAllViews()
-            (entry as? ContactsEntry)?.let {
+            (viewItem as? ContactsViewItem)?.let {
                 it.contacts?.forEach { item ->
                     addContactLine(details, item)
                 }

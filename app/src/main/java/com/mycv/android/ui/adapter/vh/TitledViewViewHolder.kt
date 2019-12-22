@@ -7,7 +7,8 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.mycv.android.R
-import com.mycv.android.ui.adapter.entry.TitledEntry
+import com.mycv.android.ui.adapter.viewitem.ExpirienceViewItem
+import com.mycv.android.ui.adapter.viewitem.ViewItem
 import kotlinx.android.synthetic.main.label_value_line.view.*
 
 open class TitledViewViewHolder(view: View): RecyclerView.ViewHolder(view) {
@@ -17,7 +18,7 @@ open class TitledViewViewHolder(view: View): RecyclerView.ViewHolder(view) {
     val detailsCard: ViewGroup? = view.findViewById(R.id.detailsCard)
     val expand: View? = view.findViewById(R.id.expand)
 
-    open fun bind(entry: TitledEntry) {
+    open fun bind(viewItem: ViewItem) {
 
     }
 

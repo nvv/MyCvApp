@@ -10,24 +10,25 @@ import com.mycv.android.R
 import com.mycv.android.data.model.WorkExperience
 import com.mycv.android.ui.adapter.entry.*
 import com.mycv.android.ui.adapter.vh.*
+import com.mycv.android.ui.adapter.viewitem.*
 
 class ResumeAdapter(
-    private var data: List<TitledEntry>? = null,
+    private var data: List<ViewItem>? = null,
     private val listener: ExperienceExpandListener? = null
 ) : RecyclerView.Adapter<TitledViewViewHolder>() {
 
-    fun setData(entries: List<TitledEntry>) {
-        this.data = entries
+    fun setData(resumeViewItem: ResumeViewItem) {
+        this.data = resumeViewItem.data
         notifyDataSetChanged()
     }
 
     override fun getItemViewType(position: Int) =
         when (data?.get(position)) {
-            is ContactsEntry -> TYPE_CONTACTS
-            is SkillsEntry -> TYPE_SKILLS
-            is ResumeObjectiveEntry -> TYPE_RESUME_OBJECTIVE
-            is ExperienceEntry -> TYPE_EXPERIENCE
-            is EducationEntry -> TYPE_EDUCATION
+            is ContactsViewItem -> TYPE_CONTACTS
+            is SkillsViewItem -> TYPE_SKILLS
+            is ResumeObjectiveViewItem -> TYPE_RESUME_OBJECTIVE
+            is ExpirienceViewItem -> TYPE_EXPERIENCE
+            is EducationViewItem -> TYPE_EDUCATION
             else -> TYPE_DEFAULT
         }
 
@@ -60,14 +61,14 @@ class ResumeAdapter(
         }
     }
 
-    private fun click(holder: TitledViewViewHolder, entry: TitledEntry) {
-        val visibility = if (entry.isExpanded == View.VISIBLE) View.GONE else View.VISIBLE
+    private fun click(holder: TitledViewViewHolder, viewItem: ViewItem) {
+        val visibility = if (viewItem.isExpanded == View.VISIBLE) View.GONE else View.VISIBLE
 
         // animate layout change only when showing
         // because hide looks ugly and unstable on old phones like Nexus 5
         holder.detailsCard?.layoutTransition = if (visibility == View.VISIBLE) LayoutTransition() else null
 
-        entry.isExpanded = visibility
+        viewItem.isExpanded = visibility
         holder.details?.visibility = visibility
 
         val showAnimation = visibility == View.GONE
