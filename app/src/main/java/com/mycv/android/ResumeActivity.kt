@@ -86,6 +86,16 @@ class ResumeActivity : DaggerAppCompatActivity(), NavigatableActivity {
         navigate(DashboardFragment.newInstance())
     }
 
+    override fun onBackPressed() {
+        val fragment = supportFragmentManager.fragments[this.supportFragmentManager.fragments.size - 1] as? BaseFragment
+
+        if (fragment?.hasBackNavigation() == true) {
+            super.onBackPressed()
+        } else {
+            finish()
+        }
+    }
+
     @SuppressLint("RestrictedApi")
     private fun setupContactButton(resume: Resume?) {
         val to = resume?.contacts?.contacts?.get("Email")

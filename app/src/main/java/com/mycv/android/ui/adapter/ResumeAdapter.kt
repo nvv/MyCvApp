@@ -8,7 +8,6 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.mycv.android.R
 import com.mycv.android.data.model.WorkExperience
-import com.mycv.android.ui.adapter.entry.*
 import com.mycv.android.ui.adapter.vh.*
 import com.mycv.android.ui.adapter.viewitem.*
 

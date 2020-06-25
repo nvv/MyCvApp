@@ -26,7 +26,7 @@ android {
     productFlavors {
         defaultConfig {
             dimension 'default'
-            buildConfigField "String", "HOSTNAME", '"gist.githubusercontent.com/nvv/e5f435149f5c7d9863743c3ae31c5a22/raw/ce8341831bf87f7cff9b2fe47ed7cc0362e01802/"'
+            buildConfigField "String", "HOSTNAME", '"gist.githubusercontent.com/nvv/e5f435149f5c7d9863743c3ae31c5a22/raw/a4de2ab699b43d1806e17b092d7cfd91ed61ef8d/"'
             buildConfigField "String", "SCHEME", '"https://"'
         }
     }
